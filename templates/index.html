@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel = "icon" href = "{{url_for('static', filename = 'images/icon.ico')}}" type = "image/x-icon">
+    <title>Seoul Academy Library System</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: linear-gradient(to bottom right, #004d40, #b2dfdb);
+        }
+        .container {
+            width: 400px;
+            background-color: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            vertical-align: middle;
+            margin: auto;
+        }
+        input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font: Georgia;
+        }
+        input[type="password"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font: Georgia;
+        }
+        input[type="submit"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 3px 0;
+            background-color: #004d40;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #00332a;
+        }
+        p {
+            font: Georgia;
+            margin-top: 10px;
+        }
+        b {
+            font: Georgia;
+            margin-top: 10px;
+        }
+        .topnav {
+            background-color: white;
+            overflow: hidden;
+            text-align: left;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            vertical-align: middle;
+        }
+        .topnav img {
+            margin-left: 20px;
+            margin-right: 20px;
+            margin-top:auto;
+            height: 40px;
+        }
+        .topnav a:not(.logo-link) {
+            float: left;
+            color: gray;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+            font: georgia;
+        }
+
+        .topnav a:not(.logo-link):hover {
+            background-color: #ddd;
+            color: black;
+        }
+
+        .topnav a:not(.logo-link).active {
+            background-color: #04AA6D;
+            color: white;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="topnav">
+        <img class="logo-link" src="{{url_for('static', filename = 'images/librarylogo.jpg')}}" alt="Library Logo" style = "background-size: cover; height:40px; margin-top: 3px; margin-bottom: 0px;" >
+        <a class="active" href="/about">
+            <b>About</b>
+        </a>
+        <a href="/admin"><b>Admin</b></a>
+        <a href="/credit"><b>Credit</b></a>
+    </div>
+
+    <div class="container">
+        <b>Seoul Academy Library System</b>
+        <form action="/book" method="post">
+            <input type="password" id = "myInput" name="student_barcode" placeholder="Scan ID Card" required><br>
+        </form>
+    </div>
+    <script>
+        window.onload = function() {
+            document.getElementById("myInput").focus();
+        };
+    </script>
+</body>
+</html>

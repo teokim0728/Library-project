@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel = "icon" href = "{{url_for('static', filename = 'images/icon.ico')}}" type = "image/x-icon">
+    <title>Seoul Academy Library System</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(to top left, #004d40, #b2dfdb);
+        }
+        .container {
+            width: 400px;
+            height: 120px;
+            background-color: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+            vertical-align: middle;
+            transition: height 0.3s;
+            text-align: center;
+        }
+        input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font: Georgia
+        }
+        input[type = "password"]{
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font: Georgia;
+        }
+        input[type="submit"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 3px 0;
+            background-color: #004d40;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #00332a;
+        }
+        p{
+            font: Georgia;
+        }
+        b{
+            font: Georgia;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        {% if name %}
+        <b>Hello, {{ name }}!</b>
+        {% endif %}
+        <form action="/main" method="post" onsubmit="showProcessing()">
+            <input type="password" name="book_barcode" id = "myInput"placeholder="Scan barcode" required><br>
+        </form>
+        <form action="/home" method="post">
+            <input type="submit" value="Go Back">
+        </form>
+        <b id="processing" style="display: none; margin-top: 3px;">Processing...</b>
+    </div>
+    <script>
+        function showProcessing() {
+            document.getElementById("processing").style.display = "block";
+            document.querySelector(".container").style.height = "135px";
+        }
+        window.onload = function() {
+            document.getElementById("myInput").focus();
+        };
+    </script>
+</body>
+</html>

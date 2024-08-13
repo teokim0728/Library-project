@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel = "icon" href = "{{url_for('static', filename = 'images/icon.ico')}}" type = "image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seoul Academy Library System</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(to top left, #004d40, #b2dfdb);
+        }
+        .container {
+            width: 400px;
+            height: 200px;
+            background-color: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+            vertical-align: middle;
+            text-align: left;
+        }
+        input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font: Georgia;
+        }
+        input[type="submit"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #004d40;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #00332a;
+        }
+        p{
+            font: Georgia
+        }
+        b{
+            font: Georgia
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        {% if name %}
+            {% if bookname %}
+                <b>Hello, {{ name }}!<br><br>
+                You have successfully borrowed the book: {{ bookname }}<br><br>
+                Please be in mind that there would be late fees if you don't return it on time.</b>
+            {% endif %}
+        {% endif %}
+        <form action="/home" method="post">
+            <div style = "display: flex; justify-content: center;"><input type="submit" value="Go back"></div>
+        </form>
+    </div>
+</body>
+</html>

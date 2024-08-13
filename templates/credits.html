@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel = "icon" href = "{{url_for('static', filename = 'images/icon.ico')}}" type = "image/x-icon">
+    <title>Credits Page</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: linear-gradient(to bottom right, #004d40, #b2dfdb);
+            position: relative;
+            overflow: hidden;
+        }
+        .container {
+            width: 600px;
+            background-color: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            margin: auto;
+            z-index: 5;
+            position: relative;
+        }
+        .ghost {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100px;
+            height: 75px;
+            background-image: url('../static/images/berd.jpg');
+            background-size: cover;
+            z-index: 1;
+            opacity: 0.8;
+            border-radius: 3%;
+        }
+        input[type="submit"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 3px 0;
+            background-color: #004d40;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #00332a;
+        }
+        strong {
+            font-weight: bold;
+        }
+        .credits-list {
+            list-style: none;
+            padding: 0;
+        }
+        .credits-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .credits-name {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-weight: bold;
+        }
+        .credits-contribution {
+            flex: 2;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding-left: 10px; 
+        }
+    </style>
+</head>
+<body>
+    <div class="ghost" style="z-index: 2; opacity: 1;"></div>
+    <script>
+        const ghosts = document.querySelectorAll('.ghost');
+        const numGhosts = ghosts.length;
+        let x = 0;
+        let y = 0;
+        let dx = 1;
+        let dy = 1;
+        function moveObject() {
+            for (let i = numGhosts - 1; i >= 1; i--) {
+                ghosts[i].style.left = ghosts[i - 1].style.left;
+                ghosts[i].style.top = ghosts[i - 1].style.top;
+            }
+            ghosts[0].style.left = x + 'px';
+            ghosts[0].style.top = y + 'px';
+            x += dx;
+            y += dy;
+            if (x + ghosts[0].offsetWidth >= window.innerWidth || x <= 0) {
+                dx = -dx;
+                if (Math.abs(dx) <= 5) {
+                    if (dx < 0) dx--;
+                    else dx++;
+                }
+            }
+            if (y + ghosts[0].offsetHeight >= window.innerHeight || y <= 0) {
+                dy = -dy;
+                if (Math.abs(dy) <= 5) {
+                    if (dy < 0) dy--;
+                    else dy++;
+                }
+            }
+        }
+        setInterval(moveObject, 10);
+    </script>
+    <div class="container">
+        <strong style="margin: 10px auto; font-size: 20px">Credits</strong>
+        <ul class="credits-list">
+            <li class="credits-item">
+                <span class="credits-name">Taehun Kim</span>
+                <span class="credits-contribution">Frontend</span>
+            </li>
+            <li class="credits-item">
+                <span class="credits-name">Taehun Kim</span>
+                <span class="credits-contribution">Graphic design</span>
+            </li>
+            <li class="credits-item">
+                <span class="credits-name">Taehun Kim</span>
+                <span class="credits-contribution">Logfile encryption / decryption</span>
+            </li>
+            <li class="credits-item">
+                <span class="credits-name">Taehun Kim</span>
+                <span class="credits-contribution">Error analysis</span>
+            </li>
+            <li class="credits-item">
+                <span class="credits-name">Taehun Kim</span>
+                <span class="credits-contribution">README.md</span>
+            </li>
+            <li class="credits-item">
+                <span class="credits-name">Taehun Kim, Kate Shin</span>
+                <span class="credits-contribution">Flowchart</span>
+            </li>
+            <li class="credits-item">
+                <span class="credits-name">Taehun Kim, Serena Oh</span>
+                <span class="credits-contribution">is_in_borrowed_books.py</span>
+            </li>
+            <li class="credits-item">
+                <span class="credits-name">Taehun Kim, Catherine Kim</span>
+                <span class="credits-contribution">update_borrowed_books.py</span>
+            </li>
+            <li class="credits-item">
+                <span class="credits-name">Taehun Kim, Doyun Kim</span>
+                <span class="credits-contribution">update_fine.py</span>
+            </li>
+            <li class="credits-item">
+                <span class="credits-name">Taehun Kim</span>
+                <span class="credits-contribution">Debugging</span>
+            </li>
+            <li class="credits-item">
+                <span class="credits-name">Taehun Kim</span>
+                <span class="credits-contribution">Gmail / Slack message sending</span>
+            </li>
+            <li class="credits-item">
+                <span class="credits-name">Taehun Kim</span>
+                <span class="credits-contribution">Backend management</span>
+            </li>
+            <li class="credits-item">
+                <span class="credits-name">Taehun Kim, Kate Shin</span>
+                <span class="credits-contribution">Instructing / teaching</span>
+            </li>
+            <li class="credits-item">
+                <span class="credits-name">Taehun Kim</span>
+                <span class="credits-contribution">Mascot design</span>
+            </li>
+        </ul>
+        <form action="/home" method="post">
+            <input type="submit" value="Go Back" style="margin: 10px auto; display: block;">
+        </form>
+    </div>
+</body>
+</html>

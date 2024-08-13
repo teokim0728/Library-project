@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{url_for('static', filename = 'images/icon.ico')}}" type="image/x-icon">
+    <title>Log Page</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: linear-gradient(to bottom right, #004d40, #b2dfdb);
+        }
+        .container {
+            width: 90%;
+            background-color: white !important; /* Ensure background-color is applied */
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            vertical-align: middle;
+            margin: auto;
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+            color: #333;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #ddd;
+        }
+        input[type="submit"] {
+            width: 200px;
+            padding: 10px;
+            margin: 3px 0;
+            background-color: #004d40;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #00332a;
+        }
+        input[type = "password"]{
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font: Georgia;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form action="/search" method="post" onsubmit="showProcessing()">
+            <input type="password" name="isbn_for_searching" id = "myInput" placeholder="Scan Barcode"><br>
+        </form>
+    </div>
+    <!-- <div class="container">
+        <form action="/returnbooks" method="post" onsubmit="showProcessing()">
+            <input type="submit" value="Return the books"><br>
+        </form>
+    </div> -->
+    <div class="container">
+        <form action="/students" method="post">
+            <input type="submit" value="Search by student names">
+        </form>
+    </div>
+    <div class="container">
+        <h1>Borrowed books</h1>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Book</th>
+                <th>Due date</th>
+            </tr>
+            {% for item in current_borrowed_books_data %}
+                <tr>
+                    <td>{{ item.split()[2] + " " + item.split()[3] }}</td>
+                    <td>{{ " ".join(item.split()[4:]) }}</td>
+                    <td>{{ item.split()[0] + " " + item.split()[1] }}</td> 
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="container">
+        <h1>Log Data</h1>
+        <form id="downloadForm" action="/download" method="post">
+            <input type="hidden" id="logdata" name="logdata" value="{{ logdata|join('\n') }}">
+            <input type="submit" value="Download">
+        </form>
+        <form action="/home" method="post">
+            <input type="submit" value="Go Back">
+        </form>
+        <p style="text-align:left">
+        {% for item in logdata %}
+            {{ item }}<br>
+        {% endfor %}
+        </p>
+        <form action="/home" method="post">
+            <input type="submit" value="Go Back">
+        </form>
+    </div>
+    <script>
+        document.getElementById("downloadForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // 기본 폼 제출 방지
+            var logdata = document.getElementById("logdata").value; // 숨겨진 입력에서 로그 데이터 가져오기
+            var blob = new Blob([logdata], { type: "text/plain" }); // 로그 데이터로 Blob 생성
+            var url = window.URL.createObjectURL(blob); // Blob에 대한 URL 생성
+            // 파일 이름 변경: [date | time] - logdata.txt
+            var currentDate = new Date();
+            var filename = currentDate.toISOString().slice(0,10) + " | " + currentDate.toTimeString().slice(0,8) + " - logdata.txt";
+            var a = document.createElement("a"); // <a> 엘리먼트 생성
+            a.href = url; // URL 설정
+            a.download = filename; // 원하는 파일 이름으로 다운로드 속성 설정
+            document.body.appendChild(a); // <a> 엘리먼트를 문서 본문에 추가
+            a.click(); // <a> 엘리먼트 클릭 시뮬레이션
+            window.URL.revokeObjectURL(url); // URL 객체 해제하여 메모리 해제
+            document.body.removeChild(a); // 문서 본문에서 <a> 엘리먼트 제거
+        });
+        function showProcessing() {
+            document.getElementById("processing").style.display = "block";
+            document.querySelector(".container").style.height = "135px";
+        }
+        window.onload = function() {
+            document.getElementById("myInput").focus();
+        };
+    </script>
+</body>
+</html>

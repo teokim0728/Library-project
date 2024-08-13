@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel = "icon" href = "{{url_for('static', filename = 'images/icon.ico')}}" type = "image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: linear-gradient(to bottom right, #004d40, #b2dfdb);
+            position: relative;
+            overflow: hidden;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        p {
+            color: #666;
+            line-height: 1.6;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            background: #004d40;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .btn:hover {
+            background: #002f2c;
+        }
+        input[type="submit"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 3px 0;
+            background-color: #004d40;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #00332a;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Welcome to Seoul Academy Library System!</h1>
+        <p>
+            The Seoul Academy Library System was created in 2024 by the Seoul Academy Coding Club. <br><br> We hope this technology will provide a seamless browsing experience and help teachers and students easily check out and return the books at the Seoul Academy library. The Seoul Academy Library System transforms the way information is accessed and used in our academic community with its comprehensive features and user-friendly interface.
+        </p>
+        <p>
+            Meet our mascot, Larry.
+        </p>
+        <img src="{{url_for('static', filename = 'images/berd.jpg')}}"  width="250" title="Larry"> <br>
+        <p>
+            Larry’s green fur and sad-and-depressed-looking eyes represent the students in the Seoul Academy.
+        </p>
+        <p>
+            We at the Seoul Academy Coding Club believe that by developing programs like this, we can make the lives of others easier. So while the eyebrows of our computer engineers may droop like those of Larry, others’ can point in the opposite direction.
+        </p>
+        <p>
+            Until the day we succeed on making everyone happy, we promise that we won't stop developing.
+        </p>
+        <br>
+        <p>
+            Taehun Kim, Manager of the Seoul Academy Coding Club.
+        </p>
+        <p>
+            2024 / 04 / 26
+        </p>
+        <form action="/home" method="post">
+            <input type="submit" value="Go Back" style="margin: 10px auto; display: block;">
+        </form>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel = "icon" href = "{{url_for('static', filename = 'images/icon.ico')}}" type = "image/x-icon">
+    <title>Seoul Academy Library System</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: linear-gradient(to bottom right, #004d40, #b2dfdb);
+        }
+        .container {
+            width: 400px;
+            background-color: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            vertical-align: middle;
+            margin: auto;
+        }
+        input[type="text"], input[type="password"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font: Georgia;
+        }
+        input[type="submit"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 3px 0;
+            background-color: #004d40;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #00332a;
+        }
+        p {
+            font: Georgia;
+            margin-top: 3px;
+            margin-bottom: 3px;
+        }
+        b {
+            font: Georgia;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <b>Seoul Academy Library System: Admin</b>
+        <p>If you are not an authorized admin, please go back.</p>
+        <p>Notice that without the correct key value, the registeration would not work.</p>
+        <form action="/register/process" method="post">
+            <input type="text" name="admin_name" id = "myInput" placeholder="ID" required><br>
+            <input type="password" name="password" placeholder="Password" required><br>
+            <input type="password" name="key" placeholder="Key" required><br>
+            <input type="submit" value="Register">
+        </form>
+        <form action="/home" method="post">
+            <input type="submit" value="Go Back">
+        </form>
+    </div>
+    <script>
+        window.onload = function() {
+            document.getElementById("myInput").focus();
+        };
+    </script>
+</body>
+</html>
