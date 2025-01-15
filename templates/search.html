@@ -81,14 +81,12 @@
         <table>
             <tr>
                 <th>Name</th>
-                <th>Book</th>
                 <th>Date</th>
                 <th>Status</th>
             </tr>
             {% for item in book_history %}
                 <tr>
                     <td>{{ item.split()[2] + " " + item.split()[3] }}</td>
-                    <td>{{ " ".join(item.split()[5:]) }}</td>
                     <td>{{ item.split()[0] + " " + item.split()[1] }}</td> 
                     <td>{{ item.split()[4]}}</td>
                 </tr>
