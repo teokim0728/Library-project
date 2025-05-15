@@ -100,14 +100,14 @@
             y += dy;
             if (x + ghosts[0].offsetWidth >= window.innerWidth || x <= 0) {
                 dx = -dx;
-                if (Math.abs(dx) <= 5) {
+                if (Math.abs(dx) <= 10) {
                     if (dx < 0) dx--;
                     else dx++;
                 }
             }
             if (y + ghosts[0].offsetHeight >= window.innerHeight || y <= 0) {
                 dy = -dy;
-                if (Math.abs(dy) <= 5) {
+                if (Math.abs(dy) <= 10) {
                     if (dy < 0) dy--;
                     else dy++;
                 }
@@ -120,59 +120,31 @@
         <ul class="credits-list">
             <li class="credits-item">
                 <span class="credits-name">Taehun Kim</span>
-                <span class="credits-contribution">Frontend</span>
+                <span class="credits-contribution">
+                    Frontend Development<br>Graphics Development<br>Backend Development<br>Logfile Encryption/Decryption<br>Server management<br>Deployment<br>
+                    README.md<br>Gmail/Slack message sending<br>Mascot design<br>Flowchart<br>Debugging<br>
+                    Teaching<br>Documentation<br>Error Analysis
+                </span>
             </li>
             <li class="credits-item">
-                <span class="credits-name">Taehun Kim</span>
-                <span class="credits-contribution">Graphic design</span>
-            </li>
-            <li class="credits-item">
-                <span class="credits-name">Taehun Kim</span>
-                <span class="credits-contribution">Logfile encryption / decryption</span>
-            </li>
-            <li class="credits-item">
-                <span class="credits-name">Taehun Kim</span>
+                <span class="credits-name">Chanyoung Hwang</span>
                 <span class="credits-contribution">Error analysis</span>
             </li>
             <li class="credits-item">
-                <span class="credits-name">Taehun Kim</span>
-                <span class="credits-contribution">README.md</span>
-            </li>
-            <li class="credits-item">
-                <span class="credits-name">Taehun Kim, Kate Shin</span>
-                <span class="credits-contribution">Flowchart</span>
-            </li>
-            <li class="credits-item">
-                <span class="credits-name">Taehun Kim, Serena Oh</span>
+                <span class="credits-name">Serena Oh</span>
                 <span class="credits-contribution">is_in_borrowed_books.py</span>
             </li>
             <li class="credits-item">
-                <span class="credits-name">Taehun Kim, Catherine Kim</span>
+                <span class="credits-name">Catherine Kim</span>
                 <span class="credits-contribution">update_borrowed_books.py</span>
             </li>
             <li class="credits-item">
-                <span class="credits-name">Taehun Kim, Doyun Kim</span>
-                <span class="credits-contribution">update_fine.py</span>
+                <span class="credits-name">Doyun Kim</span>
+                <span class="credits-contribution">update_fine.py<br>Debugging</span>
             </li>
             <li class="credits-item">
-                <span class="credits-name">Taehun Kim</span>
-                <span class="credits-contribution">Debugging</span>
-            </li>
-            <li class="credits-item">
-                <span class="credits-name">Taehun Kim</span>
-                <span class="credits-contribution">Gmail / Slack message sending</span>
-            </li>
-            <li class="credits-item">
-                <span class="credits-name">Taehun Kim</span>
-                <span class="credits-contribution">Backend management</span>
-            </li>
-            <li class="credits-item">
-                <span class="credits-name">Taehun Kim, Kate Shin</span>
-                <span class="credits-contribution">Instructing / teaching</span>
-            </li>
-            <li class="credits-item">
-                <span class="credits-name">Taehun Kim</span>
-                <span class="credits-contribution">Mascot design</span>
+                <span class="credits-name">Kate Shin</span>
+                <span class="credits-contribution">Flowchart<br>Teaching</span>
             </li>
         </ul>
         <form action="/home" method="post">

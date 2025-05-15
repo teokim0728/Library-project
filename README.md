@@ -1,5 +1,3 @@
-Ms Shin is a wonderful teacher
-
 # Seoul Academy Library project
 ## This program helps the school's library system to be way more efficient by using
 1. barcode scanning 

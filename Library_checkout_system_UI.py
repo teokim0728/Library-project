@@ -167,7 +167,7 @@ Best regards, Seoul Academy.
             elif CHECKOUT == False:
                 return redirect(url_for('index'))
 
-@app.route('/admin', methods=['POST', 'GET'])
+@app.route('/admin', methods=['GET'])
 def admin():
     return render_template('admin.html')
 
