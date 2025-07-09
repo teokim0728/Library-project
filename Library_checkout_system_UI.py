@@ -1,7 +1,7 @@
 import threading
 import time,datetime
 from time import localtime, strptime
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 from project.module.find_book import *
 from project.module.find_student import *
 from project.module.return_book import *
@@ -21,6 +21,7 @@ if sys.platform == 'win32':
     import winsound as sd
 
 app = Flask(__name__)
+app.secret_key = '5KT6CgeffTqJEVoJfGNd4lVl0e07Eu3w'
 
 INVALID = 0
 YES = 1
@@ -74,6 +75,7 @@ def init():
 
 @app.route('/home', methods=['POST', 'GET'])
 def index():
+    session.pop('admin_logged_in', None)
     global student_name, book_name, student_info, logdata
     student_name = ""
     book_name = ""
@@ -169,6 +171,7 @@ Best regards, Seoul Academy.
 
 @app.route('/admin', methods=['GET'])
 def admin():
+    session['admin_logged_in'] = True
     return render_template('admin.html')
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -179,6 +182,7 @@ def adminlogin():
     key = get_key()
     logdata = login(admin_name, password, key)
     current_borrowed_books_data = borrowed_book_list(key)
+    session['admin_logged_in'] = True
     return redirect("/log")
 
 @app.route('/credit', methods=['POST', 'GET'])
@@ -298,6 +302,13 @@ def individual_students(user_id):
         return render_template('individual_student.html', sname = name, s_information = information)
     except:
         return render_template('no_result_students.html')
+
+@app.before_request
+def restrict_private_routes():
+    private_paths = ['/log', '/search', '/students']
+    if any(request.path.startswith(path) for path in private_paths):
+        if not session.get('admin_logged_in'):
+            return redirect(url_for('admin'))
 
 if __name__ == '__main__':
     check_unreturned_books_thread = threading.Thread(target=check_unreturned_books)
