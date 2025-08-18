@@ -16,12 +16,20 @@ from project.register import register
 import slack_sdk
 import sys
 import re
+import dotenv
+dotenv.load_dotenv()
 
 if sys.platform == 'win32': 
     import winsound as sd
 
 app = Flask(__name__)
-app.secret_key = '5KT6CgeffTqJEVoJfGNd4lVl0e07Eu3w'
+app.secret_key = 'I1&KHBc./qwzFeUO$1)oxIAV~/R[VJ'
+
+@app.before_request
+def require_login():
+    PROTECTED_ROUTES = ['log_page', 'students']
+    if request.endpoint in PROTECTED_ROUTES and not session.get('admin_logged_in'):
+        return redirect(url_for('adminlogin'))
 
 INVALID = 0
 YES = 1
@@ -75,7 +83,6 @@ def init():
 
 @app.route('/home', methods=['POST', 'GET'])
 def index():
-    session.pop('admin_logged_in', None)
     global student_name, book_name, student_info, logdata
     student_name = ""
     book_name = ""
@@ -171,19 +178,25 @@ Best regards, Seoul Academy.
 
 @app.route('/admin', methods=['GET'])
 def admin():
-    session['admin_logged_in'] = True
     return render_template('admin.html')
 
 @app.route('/login', methods=['POST', 'GET'])
 def adminlogin():
     global logdata, current_borrowed_books_data
-    admin_name = request.form.get('admin_name', False)
-    password = request.form.get('password', False)
-    key = get_key()
-    logdata = login(admin_name, password, key)
-    current_borrowed_books_data = borrowed_book_list(key)
-    session['admin_logged_in'] = True
-    return redirect("/log")
+    if request.method == 'POST':
+        admin_name = request.form.get('admin_name', False)
+        password = request.form.get('password', False)
+        key = get_key()
+        logdata = login(admin_name, password, key)
+
+        if logdata != INVALID:
+            session['admin_logged_in'] = True
+            current_borrowed_books_data = borrowed_book_list(key)
+            return redirect("/log")
+        else:
+            return render_template('error.html', error="Invalid login credentials.")
+    return render_template('admin.html')
+
 
 @app.route('/credit', methods=['POST', 'GET'])
 def credit():
@@ -191,19 +204,20 @@ def credit():
 
 @app.route('/log', methods=['POST', 'GET'])
 def log_page():
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('adminlogin'))
+
     global logdata, current_borrowed_books_data
     current_borrowed_books_data_with_due_date = []
     for item in current_borrowed_books_data:
-        item.replace("\n","")
+        item.replace("\n", "")
         item = item.split()
         borrowedtime = item[0] + " " + item[1]
-        borrowedtime = time.strptime(borrowedtime,"[%Y-%m-%d %H:%M:%S]")
-        duetime = time.localtime(time.mktime(borrowedtime) + 86400*14)
-        duetime = time.strftime("%Y-%m-%d %H:%M:%S",duetime)
+        borrowedtime = time.strptime(borrowedtime, "[%Y-%m-%d %H:%M:%S]")
+        duetime = time.localtime(time.mktime(borrowedtime) + 86400 * 14)
+        duetime = time.strftime("%Y-%m-%d %H:%M:%S", duetime)
         a = duetime + " " + " ".join(item[2:])
-        a = a.replace("[","")
-        a = a.replace("]","")
-        a = a.replace("/","")
+        a = a.replace("[", "").replace("]", "").replace("/", "")
         current_borrowed_books_data_with_due_date.append(a)
     return render_template('log.html', logdata=logdata, current_borrowed_books_data=current_borrowed_books_data_with_due_date)
 
@@ -302,13 +316,6 @@ def individual_students(user_id):
         return render_template('individual_student.html', sname = name, s_information = information)
     except:
         return render_template('no_result_students.html')
-
-@app.before_request
-def restrict_private_routes():
-    private_paths = ['/log', '/search', '/students']
-    if any(request.path.startswith(path) for path in private_paths):
-        if not session.get('admin_logged_in'):
-            return redirect(url_for('admin'))
 
 if __name__ == '__main__':
     check_unreturned_books_thread = threading.Thread(target=check_unreturned_books)
