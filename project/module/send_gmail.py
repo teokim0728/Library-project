@@ -8,9 +8,9 @@ import datetime
 import inspect,logging,re,os
 from dotenv import load_dotenv
 from project.module.update_log import update_log
-from Library_checkout_system_UI import DEBUG
+
 def send_gmail(gmail,altmessage = "",bookname = ""):
-    if __name__ != "__main__" and gmail != "" and not DEBUG:
+    if __name__ != "__main__" and gmail != "":
         desired_time = datetime.datetime.now()+ timedelta(days=7)
         date = desired_time.strftime("%Y-%m-%d %I:%M:%S")
         email = "seoulacademylibrary@gmail.com"
@@ -44,7 +44,5 @@ Best regards, Seoul Academy.
         except Exception as e:
             print(f"Fatal Error while sending an email: {e}")
             update_log(f"Fatal Error while sending an email: {e}")
-    elif DEBUG:
-        pass
     else:
         print("Warning! Please do not open this file!")
