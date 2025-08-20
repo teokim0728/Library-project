@@ -226,6 +226,12 @@ def addbook():
         with open("isbndata.txt", "a", encoding="utf-8") as f:
             f.write(f"\n{book_barcode} {book_name}")
         check_out(book_barcode, student_info[0])
+        update_log(13, student_info[0], book_barcode)
+        student_id = student_info[0]
+        student_name = f"{student_info[1]} {student_info[2]}".strip()
+        current_time = _now_string()
+        _write_line(Path(f"book_history/{book_barcode}.txt"), f"{current_time} {student_name} borrowed {book_name}\n")
+        _write_line(Path(f"student_history/{student_id}.txt"),f"{current_time} {student_name} borrowed {book_barcode} {book_name}\n")
     except Exception as e:
         return render_template("error.html", error=str(e)), 500
     return render_template("borrowing_complete.html", name=student_info[1], bookname=book_name)
@@ -325,10 +331,7 @@ Best regards, Seoul Academy.
                 pass
 
         _write_line(Path(f"book_history/{book_barcode}.txt"), f"{current_time} {student_name} borrowed {title}\n")
-        _write_line(
-            Path(f"student_history/{student_id}.txt"),
-            f"{current_time} {student_name} borrowed {book_barcode} {title}\n",
-        )
+        _write_line(Path(f"student_history/{student_id}.txt"),f"{current_time} {student_name} borrowed {book_barcode} {title}\n")
 
         success()
         return render_template("borrowing_complete.html", name=student_name, bookname=title)

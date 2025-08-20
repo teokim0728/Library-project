@@ -39,6 +39,7 @@ def update_log(state, s_id = '//', isbn = '//'):
     elif (state == 10): state = "Logfile attempted to be browsed but failed"
     elif (state == 11): state = "Fine given"
     elif (state == 12): state = "Gmail sent"
+    elif (state == 13): state = "Book added"
     f.write(encrypt(strftime("[%Y-%m-%d %I:%M:%S]",date) + " " + str(s_id) +" "+ str(isbn) + " " + str(state),KEY) + "\n")
     return 0
 
