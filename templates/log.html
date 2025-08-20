@@ -89,21 +89,31 @@
         </form>
     </div>
     <div class="container">
-        <h1>Borrowed books</h1>
-        <table>
+        <div class="container">
+    <h1>Borrowed books</h1>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Book</th>
+            <th>Due date</th>
+            <th>Action</th>
+        </tr>
+        {% for item in current_borrowed_books_data %}
             <tr>
-                <th>Name</th>
-                <th>Book</th>
-                <th>Due date</th>
+                <td>{{ item.split()[2] + " " + item.split()[3] }}</td>
+                <td>{{ " ".join(item.split()[4:]) }}</td>
+                <td>{{ item.split()[0] + " " + item.split()[1] }}</td> 
+                <td>
+                    <form action="/returnbooks" method="post" style="margin:0;">
+                        <input type="hidden" name="book_info" value="{{ item }}">
+                        <input type="submit" value="Return">
+                    </form>
+                </td>
             </tr>
-            {% for item in current_borrowed_books_data %}
-                <tr>
-                    <td>{{ item.split()[2] + " " + item.split()[3] }}</td>
-                    <td>{{ " ".join(item.split()[4:]) }}</td>
-                    <td>{{ item.split()[0] + " " + item.split()[1] }}</td> 
-                </tr>
-            {% endfor %}
-        </table>
+        {% endfor %}
+    </table>
+</div>
+
     </div>
     <div class="container">
         <h1>Log Data</h1>

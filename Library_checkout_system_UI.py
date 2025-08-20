@@ -348,12 +348,12 @@ def admin():
 @app.route("/login", methods=["POST", "GET"])  # Admin login submit
 def adminlogin():
     session.clear()
-    if request.method == "POST":
+    #if request.method == "POST":
+    if True:
         admin_name = request.form.get("admin_name", "")
         password = request.form.get("password", "")
         key = get_key()
-        logdata = login(admin_name, password, key)
-
+        logdata = login(admin_name, password, key) ### 지금 이유는 모르겠지만 logdata가 0으로 뜨고있음
         if logdata != INVALID and logdata is not None:
             session["admin_logged_in"] = True
             session["logdata"] = logdata
@@ -432,6 +432,41 @@ def registration():
 def about():
     session.clear()
     return render_template("about.html")
+
+@app.route('/returnbooks', methods=['POST'])
+def return_books():
+    book_info = request.form['book_info']
+    f = open("borrowed_books.txt", "r", encoding="utf-8")
+    lines = f.readlines()
+    f.close()
+    for line in lines:
+        if book_info in line:
+            parts = line.split()
+            student_email = parts[4] if len(parts) > 4 else None
+            title = " ".join(parts[5:]) if len(parts) > 5 else "Unknown Book"
+            break
+    return_book(book_info, -1)
+    if student_email:
+            try:
+                send_gmail(
+                    student_email,
+                    f"""Hello, this is Seoul Academy Library.
+
+We would like to inform you that you have successfully returned the book: '{title}'.
+
+Thank you for using Seoul Academy Library system.
+
+Best regards, Seoul Academy.
+""",
+                )
+            except Exception:
+                pass
+    current_time = strftime("%Y-%m-%d %H:%M:%S", localtime(time.time()))
+    student_name = find_student(f". {parts[2]}")[1] + " " + find_student(f". {parts[2]} .")[2]
+    # History files
+    _write_line(Path(f"book_history/{book_info}.txt"), f"{current_time} {student_name} returned {title}\n")
+    _write_line(Path(f"student_history/{parts[2]}.txt"),f"{current_time} {student_name} returned {book_info} {title}\n",)
+    return redirect(url_for('log'))
 
 
 # -------------------------
