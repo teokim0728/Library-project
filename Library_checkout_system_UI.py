@@ -121,6 +121,26 @@ def handle_error(error):
     # Render user-friendly error page with HTTP 500
     return render_template("error.html", error=error), 500
 
+# -------------------------
+# Cache deleter
+# -------------------------
+@app.after_request
+def add_header(response):
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    return response
+
+BLOCKED_HOSTS = {"http://127.0.0.1:5000/log", "http://127.0.0.1:5000/student"} 
+
+@app.before_request
+def block_invalid_subdomains():
+    host = request.host.split(":")[0]
+    if host in BLOCKED_HOSTS:
+        session.clear()
+        session.pop("student_info", None)
+        session.pop("checkout_ready", None)
+        return redirect(url_for("index"))
 
 # -------------------------
 # Helpers
@@ -195,12 +215,24 @@ def book():
     session["checkout_ready"] = True
     return render_template("book.html", name=student_name, barcode=student_barcode)
 
+@app.route("/addbook", methods=["POST","GET"])  # Manually add book
+def addbook():
+    student_info = session.get("student_info")
+    book_barcode = request.form.get("book_barcode", "").strip()
+    book_name = request.form.get("book_name", "").strip()
+    if not book_name:
+        return render_template("error.html", error="Book name is required."), 400
+    try:
+        with open("isbndata.txt", "a", encoding="utf-8") as f:
+            f.write(f"\n{book_barcode} {book_name}")
+        check_out(book_barcode, student_info[0])
+    except Exception as e:
+        return render_template("error.html", error=str(e)), 500
+    return render_template("borrowing_complete.html", name=student_info[1], bookname=book_name)
 
 @app.route("/main", methods=["POST"])  # Book barcode -> checkout/return
 def checkout():
-    session.clear()
     if not session.get("checkout_ready") or not session.get("student_info"):
-        flash("Session expired. Please scan student barcode again.")
         return redirect(url_for("index"))
 
     student_info = session["student_info"]
@@ -211,10 +243,11 @@ def checkout():
     book_info = find_book(book_barcode)
     if book_info == INVALID or not book_info:
         return render_template(
-            "error.html",
+            "book_not_found.html",
             error="Either the book is not yet registered or the input is wrong.",
-        ), 404
-
+            book_barcode = book_barcode
+        )
+    
     # Expecting: (isbn, title, ...)
     isbn = book_info[0]
     title = re.sub(lb, "", book_info[1]) if len(book_info) > 1 else "(Untitled)"
@@ -304,6 +337,8 @@ Best regards, Seoul Academy.
 @app.route("/admin", methods=["GET"])  # Admin login page
 def admin():
     session.clear()
+    session.pop("student_info", None)
+    session.pop("checkout_ready", None)
     return render_template("admin.html")
 
 
