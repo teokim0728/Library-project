@@ -226,8 +226,24 @@ def addbook():
         student_id = student_info[0]
         student_name = f"{student_info[1]} {student_info[2]}".strip()
         current_time = _now_string()
+        student_email = student_info[3] if len(student_info) > 3 else None
         _write_line(Path(f"book_history/{book_barcode}.txt"), f"{current_time} {student_name} borrowed {book_name}\n")
         _write_line(Path(f"student_history/{student_id}.txt"),f"{current_time} {student_name} borrowed {book_barcode} {book_name}\n")
+        if student_email:
+            try:
+                send_gmail(
+                    student_email,
+                    f"""Hello, this is Seoul Academy Library.
+
+We would like to inform you that you have successfully borrowed the book: '{book_name}'.
+
+Thank you for using Seoul Academy Library system.
+
+Best regards, Seoul Academy.
+""",
+                )
+            except Exception:
+                pass
     except Exception as e:
         return render_template("error.html", error=str(e)), 500
     return render_template("borrowing_complete.html", name=student_info[1], bookname=book_name)
@@ -432,7 +448,7 @@ def return_books():
                 isbn = parts[3] if len(parts) >= 3 else None
                 admin_id = session.get("admin_name", "Unknown Admin")
                 student_email = find_student("1 " + student_id)[3] if find_student("1 " + student_id) != 0 else None
-                title = find_book(isbn)[1:] if find_book(isbn)!=0 else "Unknown Book"
+                title = ''.join(find_book(isbn)[1:]) if find_book(isbn)!=0 else "Unknown Book"
                 break
         return_book(isbn, student_id)
         if student_email:
@@ -453,7 +469,7 @@ def return_books():
         current_time = strftime("%Y-%m-%d %H:%M:%S", localtime(time.time()))
         student_name = find_student(f". {parts[2]}")[1] + " " + find_student(f". {parts[2]} .")[2]
         # History files
-        _write_line(Path(f"book_history/{book_info}.txt"), f"{current_time} {student_name} returned {title}\n")
+        _write_line(Path(f"book_history/{isbn}.txt"), f"{current_time} {student_name} returned {title}\n")
         _write_line(Path(f"student_history/{parts[2]}.txt"),f"{current_time} {student_name} returned {book_info} {title}\n",)
         return redirect(url_for('log_page'))
     except Exception as e:

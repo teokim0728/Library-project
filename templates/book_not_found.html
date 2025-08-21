@@ -24,6 +24,7 @@
             box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
             vertical-align: middle;
             text-align: center;
+            transition: height 0.3s ease; /* smooth enlargement */
         }
         input[type="text"] {
             width: calc(100% - 20px);
@@ -47,26 +48,40 @@
         input[type="submit"]:hover {
             background-color: #00332a;
         }
+        .processing-message {
+            display: none; /* hidden by default */
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container" id="mainContainer">
         <p type="text">An error occurred: {{ error }}</p>
-        <form action="/addbook" method="post">
+        <form action="/addbook" method="post" onsubmit="return showProcessingRow(this)">
             <input type="hidden" name="book_barcode" value="{{ book_barcode }}">
             <input type="text" id="myInput" name="book_name" placeholder="Please type the name of the book" required>
             <input type="submit" value="Manually add book">
+            <b class="processing-message">Processing...</b>
         </form>
         <form action="/home" method="post">
             <input type="submit" value="Go back">
         </form>
     </div>
     <script>
-        function showProcessing() {
-            document.getElementById("processing").style.display = "block";
-            document.querySelector(".container").style.height = "135px";
-            document.getElementById("myInput").focus();
+        function showProcessingRow(form) {
+            const span = form.querySelector('.processing-message');
+            if (span) {
+                span.style.display = "inline"; // show the processing message
+            }
+            form.querySelector('input[type="submit"]').disabled = true; // disable the button
+
+            // enlarge the container to fit everything
+            const container = document.getElementById('mainContainer');
+            container.style.height = "300px"; // new height to fit processing message
+
+            return true; // allow form submission
         }
+
         window.onload = function() {
             document.getElementById("myInput").focus();
         };
