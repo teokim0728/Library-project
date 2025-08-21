@@ -7,6 +7,7 @@ def find_book(barcode):
             if not line: break
             line = [line[0:line.find(' ')],line[line.find(' ')+1:]]
             if(line[0] == barcode): return line
-        except: pass
+        except Exception as e:
+            print(f"Error occurred while finding book: {e}")
     f.close()
     return 0

@@ -27,12 +27,12 @@ from pathlib import Path
 # -------------------------
 dotenv.load_dotenv()
 
-# IMPORTANT: Never hardcode secrets. Read them from env.
-SECRET_KEY = os.getenv("SECRET_KEY") or os.getenv("FLASK_SECRET_KEY") or os.urandom(32)
+SECRET_KEY = os.getenv("SECRET_KEY")
+if not SECRET_KEY:
+    raise ValueError("SECRET_KEY가 환경 변수에 설정되지 않았습니다. .env 파일을 확인하세요.")
 SLACK_BOT_TOKEN = os.getenv("SLACK_BOT_TOKEN", "")
 SLACK_CHANNEL = os.getenv("SLACK_CHANNEL", "#seoul-academy-library-messenger")
 
-# Explicitly keep DEBUG off in production
 DEBUG = False  # WARNING: Do NOT change to True in production
 
 # Sentinel values (avoid collisions: INVALID must differ from NO)
@@ -102,7 +102,6 @@ def login_required(f):
         if not session.get("admin_logged_in"):
             return redirect(url_for("adminlogin"))
         return f(*args, **kwargs)
-
     return decorated_function
 
 
@@ -131,16 +130,15 @@ def add_header(response):
     response.headers["Expires"] = "0"
     return response
 
-BLOCKED_HOSTS = {"http://127.0.0.1:5000/log", "http://127.0.0.1:5000/student"} 
+# BLOCKED_HOSTS = {"http://127.0.0.1:5000/log", "http://127.0.0.1:5000/student"} 
 
-@app.before_request
-def block_invalid_subdomains():
-    host = request.host.split(":")[0]
-    if host in BLOCKED_HOSTS:
-        session.clear()
-        session.pop("student_info", None)
-        session.pop("checkout_ready", None)
-        return redirect(url_for("index"))
+# @app.before_request
+# def block_invalid_subdomains():
+#     host = request.host.split(":")[0]
+#     if host in BLOCKED_HOSTS:
+#         session.pop("student_info", None)
+#         session.pop("checkout_ready", None)
+#         return redirect(url_for("index"))
 
 # -------------------------
 # Helpers
@@ -178,14 +176,12 @@ def _parse_timestamp_flex(ts: str) -> dt.datetime:
 # -------------------------
 @app.route("/")
 def init():
-    session.clear()
     return redirect(url_for("index"))
 
 
 @app.route("/home", methods=["POST", "GET"])
 def index():
-    # Clear any prior checkout context
-    session.clear()
+    
     session.pop("student_info", None)
     session.pop("checkout_ready", None)
     return render_template("index.html")
@@ -193,7 +189,7 @@ def index():
 
 @app.route("/book", methods=["POST"])  # Student barcode -> identify student
 def book():
-    session.clear()
+    
     student_barcode = request.form.get("student_barcode", "").strip()
     if not student_barcode:
         return render_template("error.html", error="Student barcode is required."), 400
@@ -337,32 +333,24 @@ Best regards, Seoul Academy.
         return render_template("borrowing_complete.html", name=student_name, bookname=title)
 
 
-@app.route("/admin", methods=["GET"])  # Admin login page
+@app.route("/admin", methods=["POST","GET"])  # Admin login page
 def admin():
-    session.clear()
     session.pop("student_info", None)
     session.pop("checkout_ready", None)
     return render_template("admin.html")
 
 
-@app.route("/login", methods=["POST", "GET"])  # Admin login submit
+@app.route("/login", methods=["POST", "GET"])
 def adminlogin():
-    session.clear()
-    #if request.method == "POST":
-    if True:
-        admin_name = request.form.get("admin_name", "")
-        password = request.form.get("password", "")
+    if request.method == "POST":
+        admin_name = request.form.get("admin_name", "").strip()
+        password = request.form.get("password", "").strip()
         key = get_key()
-        logdata = login(admin_name, password, key) ### 지금 이유는 모르겠지만 logdata가 0으로 뜨고있음
+        logdata = login(admin_name, password, key)
         if logdata != INVALID and logdata is not None:
+            session["admin_name"] = admin_name
             session["admin_logged_in"] = True
-            session["logdata"] = logdata
-            try:
-                current_borrowed_books_data = borrowed_book_list(key)
-            except Exception:
-                current_borrowed_books_data = []
-            session["current_borrowed_books_data"] = current_borrowed_books_data
-            return redirect("/log")
+            return redirect(url_for("log_page"))
         else:
             return render_template("error.html", error="Invalid login credentials."), 403
     return render_template("admin.html")
@@ -370,7 +358,6 @@ def adminlogin():
 
 @app.route("/credit", methods=["POST", "GET"])  # Credits page
 def credit():
-    session.clear()
     return render_template("credits.html")
 
 
@@ -380,15 +367,13 @@ def credit():
 @app.route("/log", methods=["POST", "GET"])  # Admin log dashboard
 @login_required
 def log_page():
-    current_borrowed_books_data = session.get("current_borrowed_books_data", [])
-    # Convert entries to show due date (14 days after borrow time)
+    key = get_key()
+    current_borrowed_books_data = borrowed_book_list(key)
     current_borrowed_books_data_with_due_date = []
     for raw in current_borrowed_books_data:
         line = str(raw).replace("\n", " ")
-        # Expect patterns like: [YYYY-mm-dd HH:MM:SS] rest...
         m = re.search(r"\[(?P<ts>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})\]\s*(?P<rest>.*)", line)
         if not m:
-            # Try without brackets
             m2 = re.search(r"(?P<ts>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})\s+(?P<rest>.*)", line)
         else:
             m2 = None
@@ -400,11 +385,10 @@ def log_page():
             due_str = due_dt.strftime("%Y-%m-%d %H:%M:%S")
         except Exception:
             due_str = _now_string()
-        # Clean brackets and slashes, keep remaining fields
         rest_clean = rest.replace("[", "").replace("]", "").replace("/", "")
         current_borrowed_books_data_with_due_date.append(f"{due_str} {rest_clean}")
 
-    logdata = session.get("logdata", [])
+    logdata = read_log(key)
     return render_template(
         "log.html",
         logdata=logdata,
@@ -414,13 +398,13 @@ def log_page():
 
 @app.route("/register", methods=["POST", "GET"])  # Registration page
 def register1():
-    session.clear()
+    
     return render_template("register.html")
 
 
 @app.route("/register/process", methods=["POST"])  # Registration submit
 def registration():
-    session.clear()
+    
     admin_name = request.form.get("admin_name", "")
     password = request.form.get("password", "")
     key = request.form.get("key", "")
@@ -430,7 +414,7 @@ def registration():
 
 @app.route("/about")
 def about():
-    session.clear()
+    
     return render_template("about.html")
 
 @app.route('/returnbooks', methods=['POST'])
@@ -439,34 +423,42 @@ def return_books():
     f = open("borrowed_books.txt", "r", encoding="utf-8")
     lines = f.readlines()
     f.close()
-    for line in lines:
-        if book_info in line:
-            parts = line.split()
-            student_email = parts[4] if len(parts) > 4 else None
-            title = " ".join(parts[5:]) if len(parts) > 5 else "Unknown Book"
-            break
-    return_book(book_info, -1)
-    if student_email:
-            try:
-                send_gmail(
-                    student_email,
-                    f"""Hello, this is Seoul Academy Library.
+    try:
+        for line in lines:
+            line = decrypt(line, get_key())
+            if book_info[3] in line:
+                parts = line.split()
+                student_id = parts[2] if len(parts) >= 2 else None
+                isbn = parts[3] if len(parts) >= 3 else None
+                admin_id = session.get("admin_name", "Unknown Admin")
+                student_email = find_student("1 " + student_id)[3] if find_student("1 " + student_id) != 0 else None
+                title = find_book(isbn)[1:] if find_book(isbn)!=0 else "Unknown Book"
+                break
+        return_book(isbn, student_id)
+        if student_email:
+                try:
+                    send_gmail(
+                        student_email,
+                        f"""Hello, this is Seoul Academy Library.
 
-We would like to inform you that you have successfully returned the book: '{title}'.
+    We would like to inform you that you have successfully returned the book: '{title}'.
 
-Thank you for using Seoul Academy Library system.
+    Thank you for using Seoul Academy Library system.
 
-Best regards, Seoul Academy.
-""",
-                )
-            except Exception:
-                pass
-    current_time = strftime("%Y-%m-%d %H:%M:%S", localtime(time.time()))
-    student_name = find_student(f". {parts[2]}")[1] + " " + find_student(f". {parts[2]} .")[2]
-    # History files
-    _write_line(Path(f"book_history/{book_info}.txt"), f"{current_time} {student_name} returned {title}\n")
-    _write_line(Path(f"student_history/{parts[2]}.txt"),f"{current_time} {student_name} returned {book_info} {title}\n",)
-    return redirect(url_for('log'))
+    Best regards, Seoul Academy.
+    """,
+                    )
+                except Exception:
+                    pass
+        current_time = strftime("%Y-%m-%d %H:%M:%S", localtime(time.time()))
+        student_name = find_student(f". {parts[2]}")[1] + " " + find_student(f". {parts[2]} .")[2]
+        # History files
+        _write_line(Path(f"book_history/{book_info}.txt"), f"{current_time} {student_name} returned {title}\n")
+        _write_line(Path(f"student_history/{parts[2]}.txt"),f"{current_time} {student_name} returned {book_info} {title}\n",)
+        return redirect(url_for('log_page'))
+    except Exception as e:
+        return render_template("error.html", error=f"Error processing return: {str(e)}"), 500
+
 
 
 # -------------------------
