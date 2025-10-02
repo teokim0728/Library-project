@@ -414,7 +414,6 @@ def log_page():
 
 @app.route("/register", methods=["POST", "GET"])  # Registration page
 def register1():
-    
     return render_template("register.html")
 
 
@@ -425,7 +424,7 @@ def registration():
     password = request.form.get("password", "")
     key = request.form.get("key", "")
     register(admin_name, password, key)
-    return redirect(url_for("index"))
+    return redirect(url_for("login"))
 
 
 @app.route("/about")
