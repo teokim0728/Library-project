@@ -1,5 +1,3 @@
-import tkinter as tk
-from tkinter import messagebox
 from project.module.update_log import *
 from project.module.send_gmail import *
 

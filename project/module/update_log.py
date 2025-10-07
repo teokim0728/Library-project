@@ -4,7 +4,6 @@ from project.module.find_book import *
 from dotenv import load_dotenv
 import os
 import random
-import tkinter as tk
 import math,re,inspect,sys
 
 def encrypt(text, key):
