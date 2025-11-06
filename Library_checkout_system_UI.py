@@ -718,5 +718,5 @@ if __name__ == "__main__":
     check_unreturned_books_thread.start()
 
     # Use host='0.0.0.0' if running in Docker/remote. Port from env if provided.
-    port = int(os.getenv("PORT", "8000"))
+    port = int(os.getenv("PORT", "80"))
     app.run(host="0.0.0.0", port=port, debug=DEBUG)
