@@ -527,3 +527,216 @@ The Black Horn
 9781250115058 The Boy at the top of the Mountain
 9780142426425 Fish in a Tree
 9781444000054 Marcus Sedgwick
+9780684801520 The Great Gatsby
+9780679732259 As I Lay Dying9780689852237
+9780689852237 
+9780684825540 Zorba The Greek
+9781554981205 Looks Like Daylight
+9781911617235 At Dusk
+9780374527051 Aeschylus The Oresteia
+9781503213807 A Doll's House
+9780007902149 Homer The Iliad
+9780060931919 Demian Hermann Hesse
+9780140275360 The Iliad
+9781451674170 The Odyssey
+9780446310789 To Kill A Mockingbird
+9780199213610 The Nicomachean Ethics
+9781599865423 The Flowers Of Evil
+9781780745343 The Hen Who Dreamed She Could Fly
+9780140437881 Man and Superman
+9780241200131 The Book Of Disquiet
+9780060837020 The Bell Jar
+9780140383096 The Odyssey
+1000001392424 The Odyssey
+9780141189574 Siddhartha
+9781781396803 The Old Man And The Sea
+9780393320978 Beowulf
+9780393320978 9780007350919
+9780007350919 Tess Of The D'Urbervilles
+9780141182636 The Great Gatsby
+9780399533372 Lord Of The Flies
+9780140283334 Lord Of The Flies
+9780141182636 The Great Gatsby
+& "C:/Users/Seoul Academy/AppData/Local/Programs/Python/Python313/python.exe" c:/Library/Library-project/project/_temp_book_insert.py 
+9781546782810 The Perlude; Or, Growth Of A Poet's Mind; An Autobiographical Poem
+9781500423933 Nizami
+9780140449136 Crime And Punishment
+9780199536399 The Idiot
+9780140449242 The Brothers Karamazov
+201317 Oliver Twist
+9780140439441 David Copperfield
+9780345514400 I Know Why The Caged Bird Sings
+0000027923 Jo's Boys
+9780786868711 The Five People You Meet In Heaven
+9780385496490 Tuesdays With Morrie
+9780140449099 Cervantes
+9780199588220 The Secret Garden
+9781841957982 The Penelopiad
+9780007350872 Great Expectations
+9780194791137 A Christmas Carol
+9780142437223 The Divine Comedy  Volume 1: Inferno
+9780399533372 Lord Of The Flies
+9780199536610 To The Lighthouse
+9780241436301 Orlando
+9780099561545 Stoner
+9781401308773 Dead Poets Society
+9780375751516 The Picture Of Dorian Gray
+9780007351039 Mark Twain
+9780375751516 The Picture Of Dorian Gray
+9781474607254 The Color Purple
+9780140455106 Candide, Or Optimism
+9780141439648 The Adventures Of Huckleberry Finn
+9780141441344 Daisy Miller
+9780194792349 Wuthering Heights
+9780194792264 Great Expectations
+9780872860179 Howl
+9780486421308 On Liberty
+9780486426914 The Genealogy Of Morals
+9780486454221 Utilitarianism
+9780486831855 Letters To A Young Poet
+9780486831787 Meno
+9780194792158 The Accidental Tourist
+9780194792196 David Copperfield
+9780689852237 The House Of The Scorpion
+U452424104 Siddartha
+U434261959 1984
+200727 Jo's Boys
+9780786868711 the five people you meet in heaven
+9780385496490 tuesdays with Morrie
+9780140424393 Paradise Lost
+9780099910107 Farewell to Arms
+9780879756314 The Philosophy of History
+9781854597922 Blood Wedding
+9780194791137 A Christmas Carol
+9781500423933 Nizami
+9781546782810 The prelude; or, Growth of a poet
+9780140449242 The Brothers Karamazov
+9780241436301 Orlando
+9780099561545 Stoner
+9780399533372 Lord of the Flies
+9780199536399 The Idiot
+9780199536610 To the Lighthouse
+9780140449099 Don Quixote
+9781401308773 Dead Poets Society
+9781019405567 Lord Byron's Don Juan
+9780194786171 The Great Gatsby
+9780199588220 The Secret Garden
+9780140449136 Crime and Punishment
+9781841957982 The Penelopiad
+9780142437223 The Divine Comedy
+9780140439441 Charles Dickens
+9780375751516 The Picture of Dorian Gray
+201317 Oliver Twist
+9780316098328 ROOM
+9781402726668 Frankenstein
+9780375702709 A Lesson Before Dying
+9780060837020 The Bell Jar
+9781474607254 The Color Purple
+9780375751516 The Picture of Dorian Gray
+9780007351039 The Adventures of Huckleberry Finn
+9781402713187 Treasure Island
+9780060932138 The Unbearable lightness of being
+U434261959 1984
+U452424104 Siddhartha Hermann Hesse
+9780689852237 
+9780194792196 David Copperfield
+9780194792158 The Accidental Tourist
+9780486831787 Meno
+9780486831855 Letters to a young poet
+Uy9780486454221 
+9780486454221 Utilitarianism
+9780486426914 The Genealogy of Morals
+9781841957982 The Penelopiad
+9780142437223 The Divine Comedy Volume 1: Inferno
+9780375751516 The Picture of Dorian Gray
+9780486421308 On Liberty
+9780199588220 The Secret Garden
+9780194614467 Tess of the d'Urbervilles
+9780194792660 Oliver Twist
+9780140455106 Voltaire
+9780141439648 
+9780141441344 Henry James
+9780194792349 Wuthering Heights
+(&*)!($&(@@^$ 9780194792264
+9780194792264 Great Expectations
+9780872860179 Howl and Other Poems
+9780140449242 The Brothers Karamazov
+9780399533372 
+9780099561545 Stoner
+9780199536399 The Idiot
+9780099910107 A Farewel to ARms
+9780194791137 A Christmas Carol
+9780194786171 The Great Gatsby
+9780194209717 The Merchant of Venice
+9780194238090 Little Dorrit
+9781854597922 Drama Classics
+9781401308773 Dead Poets Society
+9780786868711 the five people you meet in heaven
+0000027923 Jo
+0000027923 Jo's Boys
+9780199537006 North and South
+9781019405567 Lord Byron
+9781019405567 Lord Byron's Don Juan
+9780199536610 To the Lighthouse
+9781546782810 The Prelude; or, Growth of a poet's mind; an autobiographical poem
+9781500423933 Nizami
+9780241436301 Orlando
+9780879756314 The Philosophy of History
+9780140424393 Paradise Lost
+9780199537822 Confessions
+9780141186375 Another Country
+9781599865447 The Waste Land
+9780140449082 The Histories
+9781785434266 Don Juan
+9781840226379 Dead Souls
+9780194792639 The Joy Luck Club
+9781400031702 The Secret History
+9780194792691 Vanity Fair
+9780194792714 A Passage to India
+9780140449136 Crime and Punishment
+9780140439441 
+9780375702709 A Lesson Before Dying
+9780375702709 
+9780241252086 White Nights
+9780062213709 Barbara kingsolver
+9780385735957 Hattie Big Sky
+9780199535767 Republic
+9780143136309 Monkey King
+9780451530172 Of Human Bondage
+9780804741194 Traces
+9780140449266 The Count of Monte Cristo
+9780375836909 Turtle in Paradise
+9781594483073 A Thousand Splendid Suns
+9781594632204 Kite Runner
+9780063064164 The Birchbark House
+9780063064164 9781476733043
+9781853260407 The Three Musketeers
+9780141184425 Invisible Man
+9781982199524 The Sun also Rises9780833554253
+9780833554253 the power of one
+201107 My Antonia
+9780440413288 Bud,not buddy
+9780679723691 Cathedral
+9780142410998 Samurai Shortstop
+9781501173219 All the Light We Cannot See
+9781416978763 A momment comes
+9780385751896 The boy in the striped pajamas
+9780452295315 City of Thieves
+9780440237846 Before we were free
+9780141186887 Chinua Achebe Things fall apart
+9781471151873 The Good Earth
+9780756967079 The Najajo marines of world war 2
+9780679781585 Memories of a seisha
+9780316209489 Hawk's Hill
+9780316209489 
+1000001392424 Robinson Crusoe
+9781402745799 The man in the iron mask
+9781840224351 
+9780143107668 The Scarlet Letter
+9780743272490 The Constant Princess
+9781416911722 Haddix
+9780141321011 King Arthur
+9780006514008 The Other Boleyn Girl
+9780007902200 The Red Badge of Courage
+9780062213709 The Poisonwood Bible
+9780241252086 
