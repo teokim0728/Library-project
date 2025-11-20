@@ -9,7 +9,7 @@ def update_borrow_books(s_id, isbn):
         for line in f:
             line = decrypt(line, key)
             line = line.split()
-            if line[2] != s_id or line[3] != isbn:
+            if line[3] != isbn:
                 lines.append(line)
             else:
                 borrowed_date = line[0] + " " + line[1]
