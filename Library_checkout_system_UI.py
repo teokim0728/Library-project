@@ -269,8 +269,9 @@ def _read_students() -> list[dict]:
     with path.open("r", encoding="utf-8") as f:
         for line in f:
             parts = line.strip().split()
+            # if there are excess barcodes, fill the missing fields with empty strings to avoid index errors
             if len(parts) < 4:
-                continue
+                 parts[1:4] = [""] * (4 - len(parts))
             students.append({
                 "barcode": parts[0],
                 "first": parts[1],
@@ -771,7 +772,6 @@ def reassign_barcode():
         else:
             error = "Unknown action."
 
-        # Refresh list after changes
         students = _read_students()
 
     return render_template(
