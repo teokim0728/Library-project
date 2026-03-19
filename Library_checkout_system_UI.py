@@ -260,6 +260,34 @@ def _write_line(path: Path, line: str) -> None:
         f.write(line)
 
 
+def _read_students() -> list[dict]:
+    """Read the studentdata.txt file and return a list of student dicts."""
+    path = Path("studentdata.txt")
+    students = []
+    if not path.exists():
+        return students
+    with path.open("r", encoding="utf-8") as f:
+        for line in f:
+            parts = line.strip().split()
+            if len(parts) < 4:
+                continue
+            students.append({
+                "barcode": parts[0],
+                "first": parts[1],
+                "last": parts[2],
+                "email": parts[3],
+            })
+    return students
+
+
+def _write_students(students: list[dict]) -> None:
+    """Overwrite studentdata.txt with the provided student records."""
+    path = Path("studentdata.txt")
+    with path.open("w", encoding="utf-8") as f:
+        for s in students:
+            f.write(f"{s['barcode']} {s['first']} {s['last']} {s['email']}\n")
+
+
 def _parse_timestamp_flex(ts: str) -> dt.datetime:
     # Try multiple common formats, with or without brackets
     ts = ts.strip()
@@ -652,6 +680,106 @@ def search():
         return render_template("search.html", book_history=history, book_name=name)
     else:
         return render_template("no_result.html")
+
+
+@app.route("/reassign_barcode", methods=["GET", "POST"])  # Manage student records (reassign/edit/delete/add)
+@login_required
+def reassign_barcode():
+    message = None
+    error = None
+
+    # Load current student list for display and processing
+    students = _read_students()
+
+    if request.method == "POST":
+        action = request.form.get("action", "").strip().lower()
+
+        if action == "add":
+            barcode = request.form.get("barcode", "").strip()
+            first = request.form.get("first", "").strip()
+            last = request.form.get("last", "").strip()
+            email = request.form.get("email", "").strip()
+
+            if not barcode or not first or not last or not email:
+                error = "All fields are required to add a student."
+            elif any(s["barcode"] == barcode for s in students):
+                error = f"Barcode {barcode} is already in use."
+            else:
+                students.append({
+                    "barcode": barcode,
+                    "first": first,
+                    "last": last,
+                    "email": email,
+                })
+                _write_students(students)
+                message = f"Added student {first} {last} ({barcode})."
+
+        elif action == "update":
+            original_barcode = request.form.get("original_barcode", "").strip()
+            barcode = request.form.get("barcode", "").strip()
+            first = request.form.get("first", "").strip()
+            last = request.form.get("last", "").strip()
+            email = request.form.get("email", "").strip()
+
+            if not original_barcode or not barcode or not first or not last or not email:
+                error = "All fields are required to update a student."
+            else:
+                target = next((s for s in students if s["barcode"] == original_barcode), None)
+                if not target:
+                    error = f"Student with barcode {original_barcode} not found."
+                elif barcode != original_barcode and any(s["barcode"] == barcode for s in students):
+                    error = f"Barcode {barcode} is already in use."
+                else:
+                    target["barcode"] = barcode
+                    target["first"] = first
+                    target["last"] = last
+                    target["email"] = email
+                    _write_students(students)
+                    message = f"Updated student {first} {last} ({barcode})."
+
+        elif action == "delete":
+            original_barcode = request.form.get("original_barcode", "").strip()
+            if not original_barcode:
+                error = "Barcode is required to delete a student."
+            else:
+                original_count = len(students)
+                students = [s for s in students if s["barcode"] != original_barcode]
+                if len(students) == original_count:
+                    error = f"Student with barcode {original_barcode} was not found."
+                else:
+                    _write_students(students)
+                    message = f"Deleted student with barcode {original_barcode}."
+
+        elif action == "reassign":
+            old_barcode = request.form.get("old_barcode", "").strip()
+            new_barcode = request.form.get("new_barcode", "").strip()
+            if not old_barcode or not new_barcode:
+                error = "Both current and new barcode are required."
+            elif old_barcode == new_barcode:
+                error = "New barcode must be different from the current one."
+            else:
+                target = next((s for s in students if s["barcode"] == old_barcode), None)
+                if not target:
+                    error = f"Barcode {old_barcode} not found."
+                elif any(s["barcode"] == new_barcode for s in students):
+                    error = f"Barcode {new_barcode} is already assigned to another user."
+                else:
+                    target["barcode"] = new_barcode
+                    _write_students(students)
+                    message = f"Reassigned {old_barcode} → {new_barcode} successfully."
+
+        else:
+            error = "Unknown action."
+
+        # Refresh list after changes
+        students = _read_students()
+
+    return render_template(
+        "reassign_barcode.html",
+        error=error,
+        message=message,
+        students=students,
+    )
 
 
 @app.route("/students", methods=["POST", "GET"])  # List students

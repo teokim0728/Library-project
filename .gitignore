@@ -1,5 +1,9 @@
 admin.txt
 borrowed_books.txt
+<<<<<<< HEAD
+=======
+studentdata.txt
+>>>>>>> 8df5c3dab567b358255918aeee5d97af3c7a8120
 logfile.txt
 student_history/
 book_history/
