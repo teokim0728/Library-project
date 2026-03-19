@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel = "icon" href = "{{ url_for('static', filename = 'images/icon.ico') }}" type = "image/x-icon">
+    <title>Reassign Barcode</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: linear-gradient(to bottom right, #004d40, #b2dfdb);
+        }
+        .container {
+            width: 400px;
+            background-color: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            vertical-align: middle;
+            margin: auto;
+        }
+        input[type="text"], input[type="password"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font: Georgia;
+        }
+        input[type="submit"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 3px 0;
+            background-color: #004d40;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #00332a;
+        }
+        p {
+            font: Georgia;
+            margin-top: 10px;
+        }
+        .error {
+            color: #a00;
+            font-weight: bold;
+        }
+        .success {
+            color: #0a0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Manage Students</h2>
+
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+        {% if message %}
+            <p class="success">{{ message }}</p>
+        {% endif %}
+
+        <h3>Current students</h3>
+        <table>
+            <tr>
+                <th>Barcode</th>
+                <th>First name</th>
+                <th>Last name</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+            {% for s in students %}
+            <tr>
+                <td>
+                    <input form="form-{{ loop.index }}" type="text" name="barcode" value="{{ s.barcode }}" required>
+                </td>
+                <td>
+                    <input form="form-{{ loop.index }}" type="text" name="first" value="{{ s.first }}" required>
+                </td>
+                <td>
+                    <input form="form-{{ loop.index }}" type="text" name="last" value="{{ s.last }}" required>
+                </td>
+                <td>
+                    <input form="form-{{ loop.index }}" type="text" name="email" value="{{ s.email }}" required>
+                </td>
+                <td>
+                    <form id="form-{{ loop.index }}" action="/reassign_barcode" method="post">
+                        <input type="hidden" name="original_barcode" value="{{ s.barcode }}">
+                        <button type="submit" name="action" value="update">Update</button>
+                        <button type="submit" name="action" value="delete" onclick="return confirm('Delete student {{ s.first }} {{ s.last }}?');">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <h3>Add a new student</h3>
+        <form action="/reassign_barcode" method="post">
+            <input type="hidden" name="action" value="add">
+            <input type="text" name="barcode" placeholder="Barcode" required><br>
+            <input type="text" name="first" placeholder="First name" required><br>
+            <input type="text" name="last" placeholder="Last name" required><br>
+            <input type="text" name="email" placeholder="Email" required><br>
+            <input type="submit" value="Add student">
+        </form>
+
+        <h3>Quick barcode reassign</h3>
+        <form action="/reassign_barcode" method="post">
+            <input type="hidden" name="action" value="reassign">
+            <input type="text" name="old_barcode" placeholder="Current barcode" required><br>
+            <input type="text" name="new_barcode" placeholder="New barcode" required><br>
+            <input type="submit" value="Reassign barcode">
+        </form>
+
+        <form action="/log" method="post">
+            <input type="submit" value="Back to Log">
+        </form>
+    </div>
+</body>
+</html>
